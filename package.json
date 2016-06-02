@@ -1,7 +1,8 @@
 {
   "name": "curious-george",
   "version": "0.0.1",
-  "description": "",
+  "description": "Convert email to CloudSponge provider.",
+  "repo" : "https://github.com/cloudsponge/curious-george",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

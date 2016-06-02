@@ -1,7 +1,27 @@
 const GLOBAL = window;
 const ERROR_MSG = {
     INVALID_EMAIL : 'Invalid email address',
-    UNREACHABLE_API : 'API is unreachable'
+    UNREACHABLE_API : 'API is unreachable',
+    UNKNOWN_PROVIDER : 'Unable to find CloudSponge provider',
+}
+
+const DNS_MX_MAP = {
+    'aspmx.l.google.com'      : 'gmail',
+    'alt1.aspmx.l.google.com' : 'gmail',
+    'alt2.aspmx.l.google.com' : 'gmail',
+    'alt3.aspmx.l.google.com' : 'gmail',
+    'alt4.aspmx.l.google.com' : 'gmail',
+    'alt4.gmail-smtp-in.l.google.com' : 'gmail',
+    'alt3.gmail-smtp-in.l.google.com' : 'gmail',
+    'alt1.gmail-smtp-in.l.google.com' : 'gmail',
+    'gmail-smtp-in.l.google.com'      : 'gmail',
+    'alt2.gmail-smtp-in.l.google.com' : 'gmail',
+    
+    'mx1.biz.mail.yahoo.com'  : 'yahoo',    
+    'mx5.biz.mail.yahoo.com'  : 'yahoo',
+    'mta5.am0.yahoodns.net'   : 'yahoo',
+    'mta6.am0.yahoodns.net'   : 'yahoo',
+    'mta7.am0.yahoodns.net'   : 'yahoo',
 }
 
 class CuriousGeorge {
@@ -11,12 +31,12 @@ class CuriousGeorge {
         return new Promise((resolve, reject) => {
             if (host) {
                 let id = CuriousGeorge.getId();                
-                GLOBAL[`CuriousGeorge__jsonp__${id}`] = (obj) => {
-                    if (!obj) {
+                GLOBAL[`CuriousGeorge__jsonp__${id}`] = (response) => {
+                    if (!response) {
                         reject(ERROR_MSG.UNREACHABLE_API);
                     }
                     else {
-                        resolve(obj);
+                        resolve(response);
                     }
                     CuriousGeorge.cleanup(id);
                 }
@@ -25,6 +45,27 @@ class CuriousGeorge {
             else {
                 reject(ERROR_MSG.INVALID_EMAIL);
             }
+        })
+    }
+    
+    findProvider(email) {
+        return new Promise((resolve, reject) => {
+            this.lookup(email)
+            .then(response => {
+                let answer = response.answer || [];
+
+                for (let i = 0, len = answer.length; i < len; i++) {
+                    if (DNS_MX_MAP[answer[i].rdata[1]]) {
+                        resolve(DNS_MX_MAP[answer[i].rdata[1]]);
+                        return;
+                    }
+                }
+
+                reject(ERROR_MSG.UNKNOWN_PROVIDER);
+            })
+            .catch(err => {
+                reject(err);
+            }) 
         })
     }
     

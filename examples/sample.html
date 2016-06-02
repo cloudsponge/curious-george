@@ -9,9 +9,10 @@
                 var holder = document.getElementById('result');
                 var x = new CuriousGeorge();
                 
-                x.lookup(sender.elements['email'].value)
+                holder.innerHTML = 'Gathering information...';
+                x.findProvider(sender.elements['email'].value)
                 .then(function (result) {
-                    holder.innerHTML = JSON.stringify(result, null, 4);
+                    holder.innerHTML = result;
                 })
                 .catch(function (err) {
                     holder.innerHTML = err;

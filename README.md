@@ -15,3 +15,31 @@ npm install
 ```
 babel src/index.js --out-file build/curious-george.js --source-maps
 ```
+
+## Usage
+
+```
+var cg = new CuriousGeorge();
+
+cg.findProvider('test@arizonabay.com')
+.then(function (result) {
+   console.log(result);
+})
+.catch(function (err) {
+    console.log(err);
+})
+```
+
+## Raw JSON 
+
+```
+var cg = new CuriousGeorge();
+
+cg.lookup('test@arizonabay.com')
+.then(function (result) {
+   console.log(result);
+})
+.catch(function (err) {
+    console.log(err);
+})
+```

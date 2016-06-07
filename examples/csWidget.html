@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script src="../build/curious-george.js"></script>
+<script>
+    function getData(sender) {
+        var holder = document.getElementById('result');
+        var x = new CuriousGeorge();
+        
+        holder.innerHTML = 'Gathering information...';
+        x.findProvider(sender.elements['email'].value)
+        .then(function (result) {
+            holder.innerHTML = '';
+            cloudsponge.launch(result);
+        })
+        .catch(function (err) {
+            holder.innerHTML = err;
+        })
+        
+        return false;
+    }
+</script>
+
+<form action="" onsubmit="return getData(this);">
+    <input type="text" name="email"> <input type="submit" value="Run CS Widget">
+    <div id="result"></div>
+</form>
+<br><br> 
+
+
+<!--
+  Any widget integration must do four things:
+    1) include the widget script,
+    2) configure the widget,
+    3) provide a way for the end user to launch the widget and,
+    4) do something with the user's contacts.
+  This basic integration does all.
+ -->
+
+<!-- Include the script anywhere on your page, usually in the head -->
+<script>
+// #1 Asynchronously include the widget library:
+//  (don't forget to replace YOUR_WIDGET_SCRIPT with your CloudSponge key)
+(function(u){
+  var d=document,s='script',a=d.createElement(s),m=d.getElementsByTagName(s)[0];
+  a.async=1;a.src=u;m.parentNode.insertBefore(a,m);
+})('//api.cloudsponge.com/widget/1e29c3adfb8f38c03ee68725a9ac27fb835e3bff.js');
+// #2 configure the widget:
+//  set any options here, 
+//  for this example, we'll simply populate the contacts in the textarea above.
+//  A complete list of supported options can be found here:
+//    http://www.cloudsponge.com/developer/#options
+window.csPageOptions = {
+  textarea_id: "contact_list"
+};
+</script>
+
+<!-- 
+  #3 provide a way for the end user to launch the widget:
+  Any link with a class="cs_import" will start the import process.
+-->
+<a class="cs_import">Add from Address Book</a><br>
+
+<!-- 
+  #4 do something with the user's contacts:
+  This textarea will be populated with the contacts returned by CloudSponge. 
+  This is useful if #contact_list is the To: field in an email form.
+-->
+<textarea id="contact_list" style="width:450px;height:82px"></textarea>
+
+</body>
+</html>

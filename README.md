@@ -18,7 +18,7 @@ babel src/index.js --out-file build/curious-george.js --source-maps
 
 ## Usage
 
-```
+```javascript
 var cg = new CuriousGeorge();
 
 cg.findProvider('test@arizonabay.com')
@@ -32,7 +32,7 @@ cg.findProvider('test@arizonabay.com')
 
 ## Raw JSON 
 
-```
+```javascript
 var cg = new CuriousGeorge();
 
 cg.lookup('test@arizonabay.com')
